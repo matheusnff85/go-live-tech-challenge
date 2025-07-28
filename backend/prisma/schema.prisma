@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  leitor
+  editor
+  administrador
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(leitor)
+
+  // Relacionamento para o admin dono
+  adminOwner     User? @relation("AdminToUsers", fields: [admin_owner_id], references: [id])
+  admin_owner_id Int?
+
+  // Usuários criados por este admin
+  createdUsers User[] @relation("AdminToUsers")
+
+  // Pratos e Alimentos criados por este usuário
+  createdAlimentos Alimento[]
+  createdPratos    Prato[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Alimento {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  custo Decimal @db.Decimal(10, 2)
+  peso  Float
+
+  // Exclusão lógica
+  deletedAt DateTime?
+
+  // Relacionamento de quem criou
+  createdBy     User @relation(fields: [created_by_id], references: [id])
+  created_by_id Int
+
+  // Relacionamento com os Pratos
+  pratos Prato[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Prato {
+  id              Int      @id @default(autoincrement())
+  name            String
+  preco           Decimal  @db.Decimal(10, 2)
+  custo           Decimal  @db.Decimal(10, 2)
+  data_lancamento DateTime
+
+  // Exclusão lógica
+  deletedAt DateTime?
+
+  // Relacionamento de quem criou
+  createdBy     User @relation(fields: [created_by_id], references: [id])
+  created_by_id Int
+
+  //Relacionamento com Alimentos (N:N)
+  alimentos Alimento[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
