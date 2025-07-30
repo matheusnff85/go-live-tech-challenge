@@ -1,8 +1,23 @@
 "use client";
+import React from "react";
 import LoginForm from "../components/login-form";
+import { loginUser } from "../../services/apiService";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const login = (email: string, password: string) => {
+  const [error, setError] = React.useState<string>("");
+  const router = useRouter();
+
+  const login = async (email: string, password: string) => {
+    setError("");
+    try {
+      const { token } = await loginUser(email, password);
+      localStorage.setItem("token", token);
+      router.push("/dashboard");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setError(error.message);
+    }
     console.log(email, password);
   };
   return (
@@ -14,7 +29,7 @@ export default function Login() {
             Utilize seu email e senha para entrar.
           </p>
         </div>
-        <LoginForm onSubmit={login} />
+        <LoginForm onSubmit={login} error={error} />
       </div>
     </div>
   );
