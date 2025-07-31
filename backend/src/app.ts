@@ -3,6 +3,7 @@ import cors from "cors";
 import errorHandler from "./middlewares/error-handler";
 import authRoutes from "./routes/auth-route";
 import alimentoRoutes from "./routes/alimento-routes";
+import pratoRouter from "./routes/prato-route";
 
 class App {
   public server: express.Application;
@@ -26,6 +27,7 @@ class App {
   private routes() {
     this.server.use(authRoutes);
     this.server.use(alimentoRoutes);
+    this.server.use(pratoRouter);
   }
 
   private exceptionHandler() {
