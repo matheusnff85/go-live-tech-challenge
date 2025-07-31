@@ -27,7 +27,6 @@ class AuthService {
     }
 
     // Comparação de senhas
-    console.log(await bcrypt.hash("harry123", 10));
     const passwordMatches = await bcrypt.compare(password, user.password);
 
     if (!passwordMatches) {

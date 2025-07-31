@@ -3,12 +3,16 @@ import AuthService from "../services/auth-service";
 import StatusCodes from "../types/status-codes";
 
 class AuthController {
+  private authService: AuthService;
+  constructor() {
+    this.authService = new AuthService();
+    this.login = this.login.bind(this);
+  }
   // Rota de login
-  async login(req: Request, res: Response, next: NextFunction) {
+  public async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
-      const authService = new AuthService();
-      const user = await authService.login(email, password);
+      const user = await this.authService.login(email, password);
       return res.status(StatusCodes.OK).json(user);
     } catch (error) {
       next(error);
