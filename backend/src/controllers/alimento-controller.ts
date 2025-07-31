@@ -18,7 +18,7 @@ class AlimentoController {
     try {
       if (req.user.role !== "administrador") {
         return res.status(StatusCodes.UNAUTHORIZED).json({
-          message: "Apenas administradores podem criar alimentos.",
+          message: "Você não possui permissão para criar alimentos.",
         });
       }
       const newAlimento = await this.alimentoService.create(
@@ -63,7 +63,7 @@ class AlimentoController {
       const { id } = req.params;
       if (req.user.role !== "administrador") {
         return res.status(StatusCodes.UNAUTHORIZED).json({
-          message: "Apenas administradores podem atualizar alimentos.",
+          message: "Você não possui permissão para atualizar alimentos.",
         });
       }
       const updatedAlimento = await this.alimentoService.update(
@@ -82,7 +82,7 @@ class AlimentoController {
       const { id } = req.params;
       if (req.user.role !== "administrador") {
         return res.status(StatusCodes.UNAUTHORIZED).json({
-          message: "Apenas administradores podem deletar alimentos.",
+          message: "Você não possui permissão para deletar alimentos.",
         });
       }
       await this.alimentoService.delete(Number(id));
