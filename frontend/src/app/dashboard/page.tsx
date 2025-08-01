@@ -1,31 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../services/auth";
+
 import TabSwitcher from "../components/tab-switcher";
-//import PratosList from './pratos/PratosList';
 import AlimentosList from "./alimentos/alimento-list";
+import PratosList from "./pratos/prato-list";
 
 type ActiveTab = "pratos" | "alimentos";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("pratos");
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
 
-  return (
-    <div className="container mx-auto p-6">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Gerenciamento</h1>
-        <p className="text-gray-500 mt-1">
-          Crie, edite e visualize pratos e alimentos.
-        </p>
-      </header>
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/login");
+    }
+  }, [user, isLoading, router]);
 
-      <TabSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Carregando...
+      </div>
+    );
+  }
+  if (user) {
+    return (
+      <div className="container mx-auto p-6">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Gerenciamento</h1>
+          <p className="text-gray-500 mt-1">
+            Crie, edite e visualize pratos e alimentos.
+          </p>
+        </header>
 
-      <main className="mt-6">
-        {/* Renderização condicional baseada na aba ativa */}
-        {/*{activeTab === 'pratos' && <PratosList />}*/}
-        {activeTab === "alimentos" && <AlimentosList />}
-      </main>
-    </div>
-  );
+        <TabSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
+
+        <main className="mt-6">
+          {activeTab === "pratos" && <PratosList />}
+          {activeTab === "alimentos" && <AlimentosList />}
+        </main>
+      </div>
+    );
+  }
+  return null;
 }

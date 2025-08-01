@@ -11,7 +11,6 @@ const getToken = () => localStorage.getItem("token");
  */
 export const getAlimentos = async () => {
   try {
-    console.log(getToken());
     const response = await $.ajax({
       url: `${API_URL}/alimento`,
       method: "GET",
@@ -21,8 +20,7 @@ export const getAlimentos = async () => {
     });
     return response;
   } catch (error: any) {
-    const errorMessage =
-      error.responseJSON?.message || "Erro ao buscar alimentos.";
+    const errorMessage = error.message || "Erro ao buscar alimentos.";
     throw new Error(errorMessage);
   }
 };
@@ -44,8 +42,7 @@ export const createAlimento = async (data: CreateAlimentoDto) => {
     });
     return response;
   } catch (error: any) {
-    const errorMessage =
-      error.responseJSON?.message || "Erro ao criar o alimento.";
+    const errorMessage = error.message || "Erro ao criar o alimento.";
     throw new Error(errorMessage);
   }
 };
@@ -68,8 +65,7 @@ export const updateAlimento = async (id: number, data: CreateAlimentoDto) => {
     });
     return response;
   } catch (error: any) {
-    const errorMessage =
-      error.responseJSON?.message || "Erro ao atualizar o alimento.";
+    const errorMessage = error.message || "Erro ao atualizar o alimento.";
     throw new Error(errorMessage);
   }
 };
@@ -89,8 +85,7 @@ export const deleteAlimento = async (id: number) => {
     });
     return response;
   } catch (error: any) {
-    const errorMessage =
-      error.responseJSON?.message || "Erro ao deletar o alimento.";
+    const errorMessage = error.message || "Erro ao deletar o alimento.";
     throw new Error(errorMessage);
   }
 };

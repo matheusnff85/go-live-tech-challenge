@@ -24,7 +24,7 @@ export type IPrato = {
   data_lancamento: Date;
   deletedAt: Date | null;
   created_by_id: number;
-  alimentos?: IAlimento[];
+  alimentos: IAlimento[];
 };
 
 // Representa os dados necessários para CRIAR um novo Prato

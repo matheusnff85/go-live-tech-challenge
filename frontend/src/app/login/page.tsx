@@ -18,7 +18,6 @@ export default function Login() {
     } catch (error: any) {
       setError(error.message);
     }
-    console.log(email, password);
   };
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
