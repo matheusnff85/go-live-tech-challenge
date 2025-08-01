@@ -11,6 +11,9 @@
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio"
   },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
   "author": "https://github.com/matheusnff85",
   "license": "ISC",
   "dependencies": {

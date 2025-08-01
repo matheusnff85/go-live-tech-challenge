@@ -35,6 +35,22 @@ pause
 exit
 )
 
+echo Aplicando migracoes do banco de dados (isso criara o banco se nao existir)...
+call npx prisma migrate dev --name init
+if %errorlevel% neq 0 (
+echo Falha ao migrar o banco de dados.
+pause
+exit
+)
+
+echo Populando o banco de dados com usuarios padrao (seeding)...
+call npx prisma db seed
+if %errorlevel% neq 0 (
+echo Falha ao popular o banco de dados.
+pause
+exit
+)
+
 echo Compilando o codigo TypeScript (npm run build)...
 call npm run build
 if %errorlevel% neq 0 (

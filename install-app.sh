@@ -38,6 +38,14 @@ echo "Instalando dependências do backend (npm install)..."
 npm install
 if [ $? -ne 0 ]; then echo -e "${RED}Falha ao instalar dependências do backend.${NC}"; exit 1; fi
 
+echo "Aplicando migrações do banco de dados (isso criará o banco se não existir)..."
+npx prisma migrate dev --name init
+if [ $? -ne 0 ]; then echo -e "${RED}Falha ao migrar o banco de dados.${NC}"; exit 1; fi
+
+echo "Populando o banco de dados com usuários padrão (seeding)..."
+npx prisma db seed
+if [ $? -ne 0 ]; then echo -e "${RED}Falha ao popular o banco de dados.${NC}"; exit 1; fi
+
 echo "Compilando o código TypeScript (npm run build)..."
 npm run build
 if [ $? -ne 0 ]; then echo -e "${RED}Falha ao compilar o backend.${NC}"; exit 1; fi
@@ -45,7 +53,7 @@ if [ $? -ne 0 ]; then echo -e "${RED}Falha ao compilar o backend.${NC}"; exit 1;
 echo "Iniciando o servidor do backend em segundo plano..."
 npm start &
 BACKEND\_PID=$\!
-sleep 5 \# Dá um tempo para o servidor iniciar
+sleep 5
 
 echo -e "${GREEN}Backend iniciado com sucesso\! (PID: $BACKEND\_PID)${NC}"
 cd ..
